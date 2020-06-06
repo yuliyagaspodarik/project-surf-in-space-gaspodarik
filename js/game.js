@@ -1,16 +1,16 @@
 var canvas = document.getElementById('game');
 var context = canvas.getContext('2d');
-var cometaSize = 50;
+var cometaSize = 30;
 var spriteSize = 100;
 
 var fon = new Image();
 fon.src = './img/fon.png';
 
 var cometaImg = new Image();
-cometaImg.src = './img/1-1.png';
+cometaImg.src = './img/2.png';
 
 var spriteImg = new Image();
-spriteImg.src = './img/1.png';
+spriteImg.src = './img/sprite.png';
 
 var comets = [];
 var timer = 0;
@@ -45,8 +45,14 @@ function update() {
       speedX: Math.floor(Math.random() * 4) - 1,
       speedY: Math.floor(Math.random() * 4) + 1
     });
-
   }
+  /*setInterval(() => {comets.push({
+      size: cometaSize,
+      posX: Math.floor(Math.random() * 400),
+      posY: -cometaSize,
+      speedX: Math.floor(Math.random() * 4) - 1,
+      speedY: Math.floor(Math.random() * 4) + 1
+    })}, 5000);*/
   for (var i = 0; i < comets.length; i++) {
     comets[i].posX += comets[i].speedX;
     comets[i].posY += comets[i].speedY;
