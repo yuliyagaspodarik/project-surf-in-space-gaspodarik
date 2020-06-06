@@ -1,0 +1,9 @@
+#wrapper {
+    width: 400px;
+    margin: 0 auto;
+}
+
+canvas {
+    cursor: none;
+    border-radius: 30px;
+}
