@@ -35,14 +35,60 @@ var score = 0;
 var sprite = {
   size: spriteSize,
   mouseX: 300,
-  mouseY: 500
+  mouseY: 500,
+  speedX: 5,
+  speedY: 5
 };
 
 canvas.addEventListener('mousemove', (event) => {
   sprite.mouseX = event.offsetX;
   sprite.mouseY = event.offsetY;
 });
+document.addEventListener('keydown', move);
 
+function move(event) {
+  switch (event.code) {
+    case 'ArrowLeft':
+      moveLeft();
+      break;
+    case 'ArrowRight':
+      moveRight();
+      break;
+    case 'ArrowDown':
+      moveDown();
+      break;
+    case 'ArrowUp':
+      moveUp();
+      break;
+  }
+}
+
+function moveDown() {
+  sprite.mouseY += sprite.speedY;
+  if (sprite.mouseY + spriteSize / 2 >= canvas.height) {
+    sprite.mouseY = canvas.height - spriteSize / 2;
+  }
+}
+function moveUp() {
+  sprite.mouseY -= sprite.speedY;
+  if (sprite.mouseY - spriteSize / 2 < 0) {
+    sprite.mouseY = spriteSize / 2;
+  }
+}
+
+function moveLeft() {
+  sprite.mouseX -= sprite.speedX;
+  if (sprite.mouseX - spriteSize / 2 < 0) {
+    sprite.mouseX = spriteSize / 2;
+  }
+}
+
+function moveRight() {
+  sprite.mouseX += sprite.speedX;
+  if (sprite.mouseX + spriteSize / 2 >= canvas.width) {
+    sprite.mouseX = canvas.width - spriteSize / 2;
+  }
+}
 fon.onload = function () {
   game();
 };
