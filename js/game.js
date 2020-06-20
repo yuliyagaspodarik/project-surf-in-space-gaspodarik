@@ -1,9 +1,11 @@
 var canvas = document.getElementById('game');
 var context = canvas.getContext('2d');
-var cometSize = 30;
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+var cometSize = 40;
 var spriteSize = 100;
 var shotSize = 50;
-var demonSize = 50;
+var demonSize = 80;
 
 context.font = '18px Arial';
 context.fillStyle = 'purple';
@@ -30,6 +32,9 @@ var comets = [];
 var shots = [];
 var explosions = [];
 var demons = [];
+var stars = new Array(300).fill().map(() => {
+  return {r: Math.random() * canvas.width, s: Math.random() * 0.005, a: Math.random() * Math.PI * 2};
+});
 var timer = 0;
 var score = 0;
 var sprite = {
@@ -40,10 +45,22 @@ var sprite = {
   speedY: 5
 };
 
+window.addEventListener('resize', function() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+ // init();
+});
+
 canvas.addEventListener('mousemove', (event) => {
   sprite.mouseX = event.offsetX;
   sprite.mouseY = event.offsetY;
 });
+canvas.addEventListener('touchmove', (event) => {
+  event.preventDefault();
+  sprite.mouseX = event.touches[0].clientX;
+  sprite.mouseY = event.touches[0].clientY;
+});
+
 document.addEventListener('keydown', move);
 
 function move(event) {
@@ -69,6 +86,7 @@ function moveDown() {
     sprite.mouseY = canvas.height - spriteSize / 2;
   }
 }
+
 function moveUp() {
   sprite.mouseY -= sprite.speedY;
   if (sprite.mouseY - spriteSize / 2 < 0) {
@@ -89,6 +107,7 @@ function moveRight() {
     sprite.mouseX = canvas.width - spriteSize / 2;
   }
 }
+
 fon.onload = function () {
   game();
 };
@@ -101,10 +120,15 @@ function game() {
 
 function update() {
   timer++;
+  /*if (timer % 10 === 0) {
+    stars.push({r: Math.random() * canvas.width, s: Math.random() * 0.01, a: Math.random() * Math.PI * 2});
+  }*/
+  stars.forEach(e => {e.a += e.s});
+
   if (timer % 20 === 0) {
     comets.push({
-      size: cometSize,
-      posX: Math.floor(Math.random() * 600),
+      size: Math.floor(Math.random() * 11) + 20,//cometSize,
+      posX: Math.floor(Math.random() * canvas.width),
       posY: -cometSize,
       speedX: 0,//Math.floor(Math.random() * 4) - 1,
       speedY: Math.floor(Math.random() * 3) + 1,
@@ -183,10 +207,10 @@ function update() {
     }
 
     if (comets[i].posX + comets[i].size >= sprite.mouseX - spriteSize / 4 && comets[i].posX <= sprite.mouseX + spriteSize / 4 && comets[i].posY + comets[i].size >= sprite.mouseY - spriteSize / 4 && comets[i].posY <= sprite.mouseY + spriteSize / 4) {
-      alert('GAME OVER');
-
+      //alert('GAME OVER');
+      modal();
       //cancelAnimateFrame(game);
-     // window.location.reload();
+      // window.location.reload();
 
     }
 
@@ -223,8 +247,17 @@ function update() {
 }
 
 function render() {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  context.drawImage(fon, 0, 0, canvas.width, canvas.height);
+  //context.clearRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = 'rgba(0, 0, 8, 0.8)';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  stars.forEach(e => {
+    context.beginPath();
+    context.arc(Math.cos(e.a) * e.r + canvas.width / 2, Math.sin(e.a) * e.r + canvas.height / 2, Math.random() * 3, 0, Math.PI * 2);
+    context.closePath();
+    context.fillStyle = 'white';
+    context.fill();
+  });
+  //context.drawImage(fon, 0, 0, canvas.width, canvas.height);
   context.drawImage(spriteImg, sprite.mouseX - spriteSize / 2, sprite.mouseY - spriteSize / 2, sprite.size, sprite.size);
   for (var i = 0; i < comets.length; i++) {
     //context.drawImage(comet, comets[i].posX, comets[i].posY, comets[i].size, comets[i].size);
@@ -246,6 +279,10 @@ function render() {
   context.fillText('Score: ' + score, 20, 20);
 }
 
+function sendResult() {
+
+}
+
 var requestAnimateFrame =
   window.requestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
@@ -265,3 +302,53 @@ var cancelAnimateFrame =
   function () {
     window.clearInterval(1000 / 60);
   };
+
+function modal() {
+  var backdrop = document.querySelector('.backdrop');
+  var modal = document.querySelector('.modal');
+  var modalNoButton = document.querySelector('.modal__action--negative');
+  var modalYesButton = document.querySelector('#save-result');
+  var result = document.getElementById('result');
+  result.textContent = ' ' + score;
+
+  // modal.style.display = "block";
+  // backdrop.style.display = "block";
+  // modal.className = 'open'; // This will actually overwrite the complete class list
+  modal.classList.add('open');
+  backdrop.classList.add('open');
+
+  if (modalYesButton) {
+    modalYesButton.addEventListener('click', closeModal);
+    //$ajax
+  }
+
+  if (modalNoButton) {
+    modalNoButton.addEventListener('click', closeModal);
+  }
+
+  function closeModal() {
+    //   backdrop.style.display = "none";
+    //   modal.style.display = "none";
+    if (modal) {
+      modal.classList.remove('open');
+    }
+    backdrop.classList.remove('open');
+  }
+}
+
+function insertResult() {
+  $.ajax({
+    url: AjaxHandlerScript,
+    type: 'POST',
+    data: {
+      f: 'INSERT',
+      n: this.address,
+      v: JSON.stringify(this.storage)
+    },
+    cache: false,
+    success: function (response) {
+      console.log(response);
+    },
+    error: this.errorHandler
+  });
+}
