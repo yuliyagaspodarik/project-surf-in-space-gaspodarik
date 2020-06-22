@@ -1,5 +1,5 @@
 #wrapper {
-    /*width: 600px;*/
+    display: none;
    margin: 0 auto;
 }
 
@@ -11,14 +11,19 @@ canvas {
 .modal {
     position: fixed;
     display: none;
+    box-sizing: border-box;
     z-index: 200;
     top: 20%;
     left: 30%;
     width: 40%;
-    background: white;
-    padding: 1rem;
-    border: 1px solid #ccc;
+    background: linear-gradient(to top, #ffffff, #6e6e6e);
+    padding: 4rem 0;
+    border: 1px solid #6e6e6e;
+    border-radius: 30px;
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    opacity: 0.8;
+    text-transform: uppercase;
+    color: white;
 }
 
 .modal__title {
@@ -31,8 +36,8 @@ canvas {
 }
 
 .modal__action {
-    border: 1px solid #0e4f1f;
-    background: #0e4f1f;
+    border: 1px solid #16812c;
+    background: #16812c;
     text-decoration: none;
     color: white;
     font: inherit;
@@ -75,10 +80,82 @@ canvas {
 .buttons {
     margin: 1rem auto ;
 }
-/*
+
 body {
     background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
     margin: 0;
     overflow: hidden;
-}*/
+}
+
+#name {
+    font-size: 1.2rem;
+}
+
+#main-page-button {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #1B2735;
+    color: white;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+#spa {
+    display: block;
+    position: relative;
+}
+
+#spa-name {
+    position: absolute;
+    top: 8%;
+    padding: 5px 70px;
+    border-radius: 5px;
+    background: black;
+    color: white;
+    mix-blend-mode: multiply;
+    text-transform: uppercase;
+    font-family: 'Arial Black', sans-serif;
+    font-size: 6rem;
+    text-align: center;
+}
+
+.spa-button {
+    position: absolute;
+    left: 40%;
+    width: 20%;
+    padding: 1rem;
+    background-color: transparent;
+    border: 1px transparent;
+    color: white;
+    /*text-transform: uppercase;*/
+    letter-spacing: 2px;
+    font-family: "Arial Black", sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    animation: pulsate 1.2s linear infinite;
+
+}
+@keyframes pulsate {
+    50% {color: #fff; text-shadow: 0 -1px rgba(0,0,0,.3), 0 0 5px #ffd, 0 0 8px #fff;}
+}
+.spa-button--first {
+    top: 40%;
+}
+
+.spa-button--second {
+    top: 50%;
+}
+
+.spa-button--third {
+    top: 60%;
+}
+
+#records {
+    display: none;
+}
+
+#rules {
+    display: none;
+}
 

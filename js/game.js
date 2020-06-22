@@ -2,6 +2,8 @@ var canvas = document.getElementById('game');
 var context = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+var AjaxHandlerScript = "http://fe.it-academy.by/AjaxStringStorage2.php";
+
 var cometSize = 40;
 var spriteSize = 100;
 var shotSize = 50;
@@ -9,6 +11,27 @@ var demonSize = 80;
 
 context.font = '18px Arial';
 context.fillStyle = 'purple';
+var records = {};
+
+$.ajax(AjaxHandlerScript, {
+  type: 'POST',
+  data: {
+    f: 'READ',
+    n: 'GASPODARIK_PROJECT_SURFINSPACE'
+  },
+  success: getRecords,
+  error: errorHandler
+});
+
+function getRecords(data) {
+  console.log(data);
+  records = (JSON.parse(data.result)).sort(sortScore);
+  console.log(records);
+
+  function sortScore(a, b) {
+    return b.score - a.score;
+  }
+}
 
 var fon = new Image();
 fon.src = './img/fon.png';
@@ -48,8 +71,8 @@ var sprite = {
 window.addEventListener('resize', function() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
- // init();
 });
+
 
 canvas.addEventListener('mousemove', (event) => {
   sprite.mouseX = event.offsetX;
@@ -107,16 +130,17 @@ function moveRight() {
     sprite.mouseX = canvas.width - spriteSize / 2;
   }
 }
-
+/*
 fon.onload = function () {
   game();
 };
-
+*/
 function game() {
   update();
   render();
   requestAnimateFrame(game);
 }
+
 
 function update() {
   timer++;
@@ -131,7 +155,7 @@ function update() {
       posX: Math.floor(Math.random() * canvas.width),
       posY: -cometSize,
       speedX: 0,//Math.floor(Math.random() * 4) - 1,
-      speedY: Math.floor(Math.random() * 3) + 1,
+      speedY: Math.floor(Math.random() * 4) + 1,
       flag: 0,
       angle: 0,
       rotateAngle: Math.random() * 0.2 - 0.1
@@ -156,7 +180,7 @@ function update() {
     });
   }
 
-  if (timer % 30 === 0) {
+  if (timer % 20 === 0) {
     shots.push({size: shotSize, posX: sprite.mouseX - 20, posY: sprite.mouseY - 70, speedX: 0, speedY: -5})
   }
 
@@ -169,7 +193,7 @@ function update() {
     demons[p].posX += demons[p].speedX;
     demons[p].posY += demons[p].speedY;
     if (demons[p].posY > canvas.height) {
-      demons.splice(p, 1);
+      setTimeout(() => {demons.splice(p, 1)}, 2000);
     }
     if (demons[p].posX > canvas.width - demons[p].size || demons[p].posX < 0) {
       demons[p].speedX = -demons[p].speedX;
@@ -207,7 +231,6 @@ function update() {
     }
 
     if (comets[i].posX + comets[i].size >= sprite.mouseX - spriteSize / 4 && comets[i].posX <= sprite.mouseX + spriteSize / 4 && comets[i].posY + comets[i].size >= sprite.mouseY - spriteSize / 4 && comets[i].posY <= sprite.mouseY + spriteSize / 4) {
-      //alert('GAME OVER');
       modal();
       //cancelAnimateFrame(game);
       // window.location.reload();
@@ -247,8 +270,12 @@ function update() {
 }
 
 function render() {
-  //context.clearRect(0, 0, canvas.width, canvas.height);
-  context.fillStyle = 'rgba(0, 0, 8, 0.8)';
+
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+
+ context.fillStyle = 'rgba(0, 0, 8, 0.8)';
   context.fillRect(0, 0, canvas.width, canvas.height);
   stars.forEach(e => {
     context.beginPath();
@@ -302,7 +329,6 @@ var cancelAnimateFrame =
   function () {
     window.clearInterval(1000 / 60);
   };
-
 function modal() {
   var backdrop = document.querySelector('.backdrop');
   var modal = document.querySelector('.modal');
@@ -311,15 +337,47 @@ function modal() {
   var result = document.getElementById('result');
   result.textContent = ' ' + score;
 
-  // modal.style.display = "block";
-  // backdrop.style.display = "block";
-  // modal.className = 'open'; // This will actually overwrite the complete class list
+
   modal.classList.add('open');
   backdrop.classList.add('open');
 
   if (modalYesButton) {
-    modalYesButton.addEventListener('click', closeModal);
-    //$ajax
+    modalYesButton.addEventListener('click', () => {
+      records.unshift({name: document.getElementById('name').value, score: score});
+      var password = '123';
+      $.ajax({
+        url: AjaxHandlerScript,
+        type: 'POST',
+        data: {
+          f: 'LOCKGET',
+          n: 'GASPODARIK_PROJECT_SURFINSPACE',
+          p: password
+        },
+        cache: false,
+        success: function () {
+          $.ajax({
+            url: AjaxHandlerScript,
+            type: 'POST',
+            data: {
+              f: 'UPDATE',
+              n: 'GASPODARIK_PROJECT_SURFINSPACE',
+              p: password,
+              v: JSON.stringify(records)
+            },
+            cache: false,
+            success: scoreReset,//???
+            error: errorHandler
+          });
+
+          function scoreReset() {/////????
+            score = null;
+          }
+        },
+        error: errorHandler
+      });
+
+      closeModal();
+    });
   }
 
   if (modalNoButton) {
@@ -327,8 +385,7 @@ function modal() {
   }
 
   function closeModal() {
-    //   backdrop.style.display = "none";
-    //   modal.style.display = "none";
+
     if (modal) {
       modal.classList.remove('open');
     }
@@ -336,6 +393,10 @@ function modal() {
   }
 }
 
+function errorHandler(jqXHR, StatusStr, ErrorStr) {
+  alert(StatusStr + ' ' + ErrorStr);
+}
+/*
 function insertResult() {
   $.ajax({
     url: AjaxHandlerScript,
@@ -352,3 +413,23 @@ function insertResult() {
     error: this.errorHandler
   });
 }
+
+
+$.ajax(AjaxHandlerScript, {
+        type: 'POST',
+        data: {
+          f: 'READ',
+          n: 'GASPODARIK_PROJECT_SURF_IN_SPACE'
+        },
+        success: records,
+        error: errorHandler
+      });
+
+      function records(data) {
+        recordsStr += JSON.parse(data.result);
+console.log();
+      }
+      function errorHandler(jqXHR, StatusStr, ErrorStr) {
+        alert(StatusStr + ' ' + ErrorStr);
+      }
+*/

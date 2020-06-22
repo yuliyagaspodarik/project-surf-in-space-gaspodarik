@@ -4,23 +4,84 @@
   <meta charset="UTF-8">
   <title>Surf in space</title>
   <link rel="stylesheet" href="styles/style.css">
+  <link rel="stylesheet" href="styles/normalize.css">
+  <script src="js/library/jquery-3.2.1.min.js"></script>
+  <script src="js/spa.js"></script>
+  <script src='http://s.cdpn.io/3/reqAnimFramePolyfill.js'></script>
+
 </head>
 <body>
+  <section id="modal">
   <div class="backdrop"></div>
   <div class="modal">
     <h1 class="modal__title">Game over</h1>
     <div class="modal__actions">
       <p>Your result:<span id="result"></span></p>
-      <input id="name" type="text" placeholder="Your name">
+      <input id="name" type="text" placeholder="Enter your name">
       <div class="buttons">
-        <button id="save-result" class="modal__action" type="button" onclick="sendResult()">Save!</button>
+        <button id="save-result" class="modal__action" type="button" onclick="sendResult()">Of course save!</button>
         <button class="modal__action modal__action--negative" type="button">Cancel</button>
+        <div><button id="main-page-button" onclick="switchToMainPage()">Menu</button></div>
       </div>
     </div>
   </div>
+  </section>
+  <section>
   <div id="wrapper">
     <canvas id="game"> <!--width="600" height="600"-->Обновите браузер, Canvas не поддерживаетя</canvas>
   </div>
+  </section>
+  <div id="spa">
+    <div id="spa-name">Surf in space</div>
+    <input class="spa-button spa-button--first" type="button" value="New Game" onclick="switchToGamePage()">
+    <input class="spa-button spa-button--second" type="button" value="Records" onclick="switchToRecordsPage()">
+    <input class="spa-button spa-button--third" type="button" value="Rules" onclick="switchToRulesPage()">
+  </div>
+  <section id="records">
+    <div id="wrapper-records">
+
+    </div>
+  </section>
+  <section id="rules"></section>
   <script type="text/javascript" src="js/game.js"></script>
+
+  <!--
+  <script>
+    'use strict';
+
+    var records = [
+      {name: 'Maks', score: 256},
+      {name: 'Alex', score: 541},
+      {name: 'Serhio', score: 548},
+      {name: 'Yuliya', score: 1087},
+      {name: 'Milena', score: 718},
+      {name: 'Sabina', score: 625},
+      {name: 'Vlad', score: 512},
+      {name: 'Victor', score: 336}
+      ];
+    var AjaxHandlerScript = "http://fe.it-academy.by/AjaxStringStorage2.php";
+
+    $.ajax({
+      url: AjaxHandlerScript,
+      type: 'POST',
+      data: {
+        f: 'INSERT',
+        n: 'GASPODARIK_PROJECT_SURFINSPACE',
+        v: JSON.stringify(records)
+      },
+      cache: false,
+      success: function (response) {
+        console.log(response);
+      },
+      error: errorHandler
+    });
+
+    function errorHandler(jqXHR, StatusStr, ErrorStr) {
+      alert(StatusStr + ' ' + ErrorStr);
+    }
+  </script> -->
+
+  <script src="js/vanilla-iteraction.js"></script>
+
 </body>
 </html>
