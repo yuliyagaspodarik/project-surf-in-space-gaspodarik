@@ -17,18 +17,18 @@
     <h1 class="modal__title">Game over</h1>
     <div class="modal__actions">
       <p>Your result:<span id="result"></span></p>
-      <input id="name" type="text" placeholder="Enter your name">
+      <input id="player-name" type="text" placeholder="Enter your name">
       <div class="buttons">
         <button id="save-result" class="modal__action" type="button" onclick="sendResult()">Of course save!</button>
         <button class="modal__action modal__action--negative" type="button">Cancel</button>
-        <div><button id="main-page-button" onclick="switchToMainPage()">Menu</button></div>
+        <div><button class="main-page-button" onclick="switchToMainPage()">Menu</button></div>
       </div>
     </div>
   </div>
   </section>
-  <section>
-  <div id="wrapper">
-    <canvas id="game"> <!--width="600" height="600"-->Обновите браузер, Canvas не поддерживаетя</canvas>
+  <section id="game">
+  <div id="game-wrapper">
+    <canvas id="game-board">Обновите браузер, Canvas не поддерживаетя</canvas>
   </div>
   </section>
   <div id="spa">
@@ -42,6 +42,8 @@
     <div id="wrapper-records">
 
     </div>
+    <div><button class="main-page-button" onclick="switchToMainPage()">Menu</button></div>
+
   </section>
   <section id="rules"></section>
   <script type="text/javascript" src="js/game.js"></script>

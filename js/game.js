@@ -1,4 +1,4 @@
-var canvas = document.getElementById('game');
+var canvas = document.getElementById('game-board');
 var context = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -11,7 +11,7 @@ var demonSize = 80;
 
 context.font = '18px Arial';
 context.fillStyle = 'purple';
-var records = {};
+var records = [];
 
 $.ajax(AjaxHandlerScript, {
   type: 'POST',
@@ -344,7 +344,7 @@ function modal() {
 
   if (modalYesButton) {
     modalYesButton.addEventListener('click', () => {
-      records.unshift({name: document.getElementById('name').value, score: score});
+      records.push({name: document.getElementById('player-name').value, score: score});
       var password = '123';
       $.ajax({
         url: AjaxHandlerScript,
@@ -366,13 +366,13 @@ function modal() {
               v: JSON.stringify(records)
             },
             cache: false,
-            success: scoreReset,//???
+            success: (response) => {console.log(response)},//???
             error: errorHandler
           });
 
-          function scoreReset() {/////????
+          /*function scoreReset() {
             score = null;
-          }
+          }*/
         },
         error: errorHandler
       });

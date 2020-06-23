@@ -9,13 +9,13 @@ if (state === '') {
 } else {
   state = JSON.parse(state);
 }
-/*let page = '';*/
+let page = '';
 
   switch (state.pageName) {
     case 'Main':
       document.getElementById('spa').style.display = 'block';
       document.getElementById('modal').style.display = 'none';
-      document.getElementById('wrapper').style.display = 'none';
+      document.getElementById('game').style.display = 'none';
       document.getElementById('records').style.display = 'none';
       document.getElementById('rules').style.display = 'none';
       break;
@@ -25,34 +25,39 @@ if (state === '') {
       };*/
       document.getElementById('spa').style.display = 'none';
       document.getElementById('modal').style.display = 'none';
-      document.getElementById('wrapper').style.display = 'block';
+      document.getElementById('game').style.display = 'block';
       document.getElementById('records').style.display = 'none';
       document.getElementById('rules').style.display = 'none';
 
       break;
     case 'Records':
+      page += '<ul id="records-content">';
+      for(let i = 0; i <=8; i++) {
+      page += `<li><span class="records-name">${records[i].name}</span> <span class="records-score">${records[i].score}</span></li>`;
+      }
+      page += '</ul>';
+      document.getElementById('wrapper-records').innerHTML = page;
       document.getElementById('spa').style.display = 'none';
       document.getElementById('modal').style.display = 'none';
-      document.getElementById('wrapper').style.display = 'none';
+      document.getElementById('game').style.display = 'none';
       document.getElementById('records').style.display = 'block';
       document.getElementById('rules').style.display = 'none';
       break;
     case 'Rules':
       document.getElementById('spa').style.display = 'none';
       document.getElementById('modal').style.display = 'none';
-      document.getElementById('wrapper').style.display = 'none';
+      document.getElementById('game').style.display = 'none';
       document.getElementById('records').style.display = 'none';
       document.getElementById('rules').style.display = 'block';
       break;
     default:
       document.getElementById('spa').style.display = 'block';
       document.getElementById('modal').style.display = 'none';
-      document.getElementById('wrapper').style.display = 'none';
+      document.getElementById('game').style.display = 'none';
       document.getElementById('records').style.display = 'none';
       document.getElementById('rules').style.display = 'none';
       break;
   }
-//?
 }
 
 function switchToMainPage() {
