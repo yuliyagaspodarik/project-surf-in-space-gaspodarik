@@ -6,8 +6,8 @@
   <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="styles/normalize.css">
   <script src="js/library/jquery-3.2.1.min.js"></script>
-  <script src="js/spa.js"></script>
   <script src='http://s.cdpn.io/3/reqAnimFramePolyfill.js'></script>
+  <script src='http://code.jquery.com/jquery-latest.js'></script>
 
 </head>
 <body>
@@ -32,7 +32,8 @@
   </div>
   </section>
   <div id="spa">
-    <div id="spa-name">Surf in space</div>
+    <div id="spa-name">Surf in space
+    <img id="spa-name--image" src="img/sprite.png"></div>
     <input class="spa-button spa-button--first" type="button" value="New Game" onclick="switchToGamePage()">
     <input class="spa-button spa-button--second" type="button" value="Records" onclick="switchToRecordsPage()">
     <input class="spa-button spa-button--third" type="button" value="Rules" onclick="switchToRulesPage()">
@@ -82,6 +83,7 @@
   </script> -->
 
   <script src="js/vanilla-iteraction.js"></script>
+  <script src="js/spa.js"></script>
 
 </body>
 </html>

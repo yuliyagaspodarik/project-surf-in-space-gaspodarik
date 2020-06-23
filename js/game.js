@@ -130,11 +130,11 @@ function moveRight() {
     sprite.mouseX = canvas.width - spriteSize / 2;
   }
 }
-/*
-fon.onload = function () {
+
+window.onload = function () {
   game();
 };
-*/
+
 function game() {
   update();
   render();
@@ -330,6 +330,7 @@ var cancelAnimateFrame =
     window.clearInterval(1000 / 60);
   };
 function modal() {
+  document.getElementById('modal').style.display = 'block';
   var backdrop = document.querySelector('.backdrop');
   var modal = document.querySelector('.modal');
   var modalNoButton = document.querySelector('.modal__action--negative');

@@ -1,11 +1,14 @@
+* {
+    outline: none;
+}
+
 #wrapper {
     display: none;
-   margin: 0 auto;
+    margin: 0 auto;
 }
 
 canvas {
     cursor: none;
-    /*border-radius: 30px;*/
 }
 
 .modal {
@@ -78,7 +81,7 @@ canvas {
 }
 
 .buttons {
-    margin: 1rem auto ;
+    margin: 1rem auto;
 }
 
 body {
@@ -111,13 +114,57 @@ body {
     top: 8%;
     padding: 5px 70px;
     border-radius: 5px;
-    background: black;
+    /*background: black;*/
     color: white;
-    mix-blend-mode: multiply;
+    /*mix-blend-mode: multiply;*/
     text-transform: uppercase;
     font-family: 'Arial Black', sans-serif;
     font-size: 6rem;
     text-align: center;
+}
+
+#spa-name--image {
+    width: 25%;
+    position: absolute;
+    right: -150px;
+    bottom: -150px;
+    animation: snake 10s ease infinite;
+}
+
+@keyframes snake {
+    0% {
+        transform: translate(2px, 1px) rotate(0deg);
+    }
+    10% {
+        transform: translate(-1px, -2px) rotate(-3deg);
+    }
+    20% {
+        transform: translate(-3px, 0px) rotate(3deg);
+    }
+    30% {
+        transform: translate(0px, 2px) rotate(0deg);
+    }
+    40% {
+        transform: translate(1px, -1px) rotate(3deg);
+    }
+    50% {
+        transform: translate(-1px, 2px) rotate(-3deg);
+    }
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+    70% {
+        transform: translate(2px, 1px) rotate(-3deg);
+    }
+    80% {
+        transform: translate(-1px, -1px) rotate(3deg);
+    }
+    90% {
+        transform: translate(2px, 2px) rotate(0deg);
+    }
+    100% {
+        transform: translate(2px, 1px) rotate(-3deg);
+    }
 }
 
 .spa-button {
@@ -125,30 +172,34 @@ body {
     left: 40%;
     width: 20%;
     padding: 1rem;
-    background-color: transparent;
+    background-color: black;
     border: 1px transparent;
+    border-radius: 10px;
     color: white;
-    /*text-transform: uppercase;*/
     letter-spacing: 2px;
     font-family: "Arial Black", sans-serif;
     font-size: 2rem;
     font-weight: 700;
     animation: pulsate 1.2s linear infinite;
-
 }
+
 @keyframes pulsate {
-    50% {color: #fff; text-shadow: 0 -1px rgba(0,0,0,.3), 0 0 5px #ffd, 0 0 8px #fff;}
-}
-.spa-button--first {
-    top: 40%;
+    50% {
+        color: #fff;
+        text-shadow: 0 -1px rgba(0, 0, 0, .3), 0 0 5px #ffd, 0 0 8px #fff;
+    }
 }
 
-.spa-button--second {
+.spa-button--first {
     top: 50%;
 }
 
+.spa-button--second {
+    top: 65%;
+}
+
 .spa-button--third {
-    top: 60%;
+    top: 80%;
 }
 
 #records {
