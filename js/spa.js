@@ -13,22 +13,21 @@ let page = '';
 
   switch (state.pageName) {
     case 'Main':
-      document.getElementById('spa').style.display = 'block';
-      document.getElementById('modal').style.display = 'none';
-      document.getElementById('game').style.display = 'none';
-      document.getElementById('records').style.display = 'none';
-      document.getElementById('rules').style.display = 'none';
+      $('#spa').show();
+      $('#modal').hide();
+      $('#game').hide();
+      $('#records').hide();
+      $('#rules').hide();
       break;
     case 'Game':
       /*window.onload = function () {
         game();
       };*/
-      document.getElementById('spa').style.display = 'none';
-      document.getElementById('modal').style.display = 'none';
-      document.getElementById('game').style.display = 'block';
-      document.getElementById('records').style.display = 'none';
-      document.getElementById('rules').style.display = 'none';
-
+      $('#spa').hide();
+      $('#modal').hide();
+      $('#game').show();
+      $('#records').hide();
+      $('#rules').hide();
       break;
     case 'Records':
       page += '<ul id="records-content">';
@@ -36,26 +35,26 @@ let page = '';
       page += `<li><span class="records-name">${records[i].name}</span> <span class="records-score">${records[i].score}</span></li>`;
       }
       page += '</ul>';
-      document.getElementById('wrapper-records').innerHTML = page;
-      document.getElementById('spa').style.display = 'none';
-      document.getElementById('modal').style.display = 'none';
-      document.getElementById('game').style.display = 'none';
-      document.getElementById('records').style.display = 'block';
-      document.getElementById('rules').style.display = 'none';
+      document.getElementById('wrapper-records').innerHTML = page;//?
+      $('#spa').hide();
+      $('#modal').hide();
+      $('#game').hide();
+      $('#records').show();
+      $('#rules').hide();
       break;
     case 'Rules':
-      document.getElementById('spa').style.display = 'none';
-      document.getElementById('modal').style.display = 'none';
-      document.getElementById('game').style.display = 'none';
-      document.getElementById('records').style.display = 'none';
-      document.getElementById('rules').style.display = 'block';
+      $('#spa').hide();
+      $('#modal').hide();
+      $('#game').hide();
+      $('#records').hide();
+      $('#rules').show();
       break;
     default:
-      document.getElementById('spa').style.display = 'block';
-      document.getElementById('modal').style.display = 'none';
-      document.getElementById('game').style.display = 'none';
-      document.getElementById('records').style.display = 'none';
-      document.getElementById('rules').style.display = 'none';
+      $('#spa').show();
+      $('#modal').hide();
+      $('#game').hide();
+      $('#records').hide();
+      $('#rules').hide();
       break;
   }
 }

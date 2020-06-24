@@ -2,7 +2,13 @@
     outline: none;
 }
 
-#wrapper {
+body {
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    margin: 0;
+    overflow: hidden;
+}
+
+#game {
     display: none;
     margin: 0 auto;
 }
@@ -83,12 +89,6 @@ canvas {
 
 .buttons {
     margin: 1rem auto;
-}
-
-body {
-    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
-    margin: 0;
-    overflow: hidden;
 }
 
 #player-name {
