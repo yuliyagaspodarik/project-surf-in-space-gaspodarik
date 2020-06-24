@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Surf in space</title>
+  <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap&subset=cyrillic" rel="stylesheet">
   <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="styles/normalize.css">
   <script src="js/library/jquery-3.2.1.min.js"></script>
@@ -19,9 +20,8 @@
       <p>Your result:<span id="result"></span></p>
       <input id="player-name" type="text" placeholder="Enter your name">
       <div class="buttons">
-        <button id="save-result" class="modal__action" type="button" onclick="sendResult()">Of course save!</button>
+        <button id="save-result" class="modal__action" type="button" onclick="sendResult()">Save of course!</button>
         <button class="modal__action modal__action--negative" type="button">Cancel</button>
-        <div><button class="main-page-button" onclick="switchToMainPage()">Menu</button></div>
       </div>
     </div>
   </div>
@@ -30,6 +30,7 @@
   <div id="game-wrapper">
     <canvas id="game-board">Обновите браузер, Canvas не поддерживаетя</canvas>
   </div>
+    <div><button class="main-page-button" onclick="switchToMainPage()">Menu</button></div>
   </section>
   <div id="spa">
     <div id="spa-name">Surf in space
@@ -39,13 +40,16 @@
     <input class="spa-button spa-button--third" type="button" value="Rules" onclick="switchToRulesPage()">
   </div>
   <section id="records">
-    <div id="wrapper-records">
-
-    </div>
+    <div id="wrapper-records"></div>
     <div><button class="main-page-button" onclick="switchToMainPage()">Menu</button></div>
-
   </section>
-  <section id="rules"></section>
+  <section id="rules">
+    <p>Летайте...</p>
+    <p>Осторожно! &#x2727 Звездопад никому не идет на пользу. Хотя это очень красиво &#x2764!</p>
+    <p>Кстати, не забывайте сбивать препятствия. Это ваши очки &#x2655.</p>
+    <p>Управляйте с помощью мышью, touchpad или клавиш &#x2190 и &#x2192 .</p>
+    <div><button class="main-page-button" onclick="switchToMainPage()">Menu</button></div>
+  </section>
   <script type="text/javascript" src="js/game.js"></script>
 
   <!--

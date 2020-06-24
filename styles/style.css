@@ -30,8 +30,8 @@ canvas {
 }
 
 .modal__title {
-    text-align: center;
     margin: 0 0 1rem 0;
+    text-align: center;
 }
 
 .modal__actions {
@@ -39,19 +39,20 @@ canvas {
 }
 
 .modal__action {
-    border: 1px solid #16812c;
-    background: #16812c;
-    text-decoration: none;
+    background: linear-gradient(to top, #1B2735, #4f647a);
+    border: 1px solid #1B2735;
     color: white;
+    text-decoration: none;
     font: inherit;
     padding: 0.5rem 1rem;
     cursor: pointer;
+    animation: pulsate 1.2s linear infinite;
 }
 
 .modal__action:hover,
 .modal__action:active {
-    background: #2ddf5c;
-    border-color: #2ddf5c;
+    background: linear-gradient(to top, #4f647a, #1B2735);
+
 }
 
 .modal__action--negative {
@@ -101,14 +102,13 @@ body {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: linear-gradient(to top, #1B2735, #617b96);
     border: 1px solid #1B2735;
+    background: linear-gradient(to top, #1B2735, #617b96);
     color: white;
     text-transform: uppercase;
     text-align: center;
     font-weight: 700;
     animation: pulsate 1.2s linear infinite;
-
 }
 
 .main-page-button:hover {
@@ -123,11 +123,9 @@ body {
 #spa-name {
     position: absolute;
     top: 8%;
-    padding: 5px 70px;
+    padding-left: 70px;
     border-radius: 5px;
-    /*background: black;*/
     color: white;
-    /*mix-blend-mode: multiply;*/
     text-transform: uppercase;
     font-family: 'Arial Black', sans-serif;
     font-size: 6rem;
@@ -135,10 +133,10 @@ body {
 }
 
 #spa-name--image {
-    width: 25%;
+    width: 20%;
     position: absolute;
     right: -150px;
-    bottom: -150px;
+    top: 50px;
     animation: snake 10s ease infinite;
 }
 
@@ -147,7 +145,7 @@ body {
         transform: translate(2px, 1px) rotate(0deg);
     }
     10% {
-        transform: translate(-1px, -2px) rotate(-3deg);
+        transform: translate(0px, -2px) rotate(-3deg);
     }
     20% {
         transform: translate(-3px, 0px) rotate(3deg);
@@ -165,16 +163,16 @@ body {
         transform: translate(-3px, 1px) rotate(0deg);
     }
     70% {
-        transform: translate(2px, 1px) rotate(-3deg);
+        transform: translate(-1px, 1px) rotate(-3deg);
     }
     80% {
-        transform: translate(-1px, -1px) rotate(3deg);
+        transform: translate(1px, -1px) rotate(3deg);
     }
     90% {
-        transform: translate(2px, 2px) rotate(0deg);
+        transform: translate(2px, 2px) rotate(1deg);
     }
     100% {
-        transform: translate(2px, 1px) rotate(-3deg);
+        transform: translate(2px, 1px) rotate(0deg);
     }
 }
 
@@ -183,15 +181,21 @@ body {
     left: 40%;
     width: 20%;
     padding: 1rem;
-    background-color: black;
+    background: linear-gradient(to top, black, #222);
     border: 1px transparent;
-    border-radius: 10px;
+    border-radius: 30px;
     color: white;
     letter-spacing: 2px;
     font-family: "Arial Black", sans-serif;
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 700;
     animation: pulsate 1.2s linear infinite;
+    opacity: 0.9;
+}
+
+.spa-button:hover {
+    background: linear-gradient(to top, #222, black);
+
 }
 
 @keyframes pulsate {
@@ -214,10 +218,6 @@ body {
 }
 
 #records {
-    display: none;
-}
-
-#rules {
     display: none;
 }
 
@@ -244,4 +244,19 @@ body {
 
 .records-score {
     color: lightskyblue;
+}
+
+#rules {
+    display: none;
+    position: relative;
+    height: 90vh;
+    margin: 2rem auto;
+    padding: 0 4rem;
+}
+
+#rules p {
+    font-size: 2rem;
+    background: linear-gradient(to right, purple, pink, cyan, blue, violet);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
