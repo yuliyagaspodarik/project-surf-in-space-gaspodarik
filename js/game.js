@@ -1,185 +1,257 @@
-
-
-
-const canvas = document.getElementById('game-board');
-const context = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-const AjaxHandlerScript = "http://fe.it-academy.by/AjaxStringStorage2.php";
-
-const cometSize = 40;
-const spriteSize = 100;
-const shotSize = 50;
-const demonSize = 80;
-
-context.font = '18px Arial';
-context.fillStyle = 'purple';
-let records = [];
-
-$.ajax(AjaxHandlerScript, {
-  type: 'POST',
-  data: {
-    f: 'READ',
-    n: 'GASPODARIK_PROJECT_SURFINSPACE'
-  },
-  success: (response) => {
-    console.log(response);//////
-    records = (JSON.parse(response.result)).sort(sortScore);
-    console.log(records);///////
-///// delete повтор
-    function sortScore(a, b) {
-      return b.score - a.score;
+let game = {
+  AjaxHandlerScript: "http://fe.it-academy.by/AjaxStringStorage2.php",
+  canvas: null,
+  context: null,
+  board: null,
+  sprite: null,
+  spa: null,
+  width: 0,
+  height: 0,
+  score: 0,
+  timer: 0,
+  dimensions: {
+    max: {
+      width: 1550,
+      height: 750
+    },
+    min: {
+      width: 300,
+      height: 300
     }
   },
-  error: (jqXHR, StatusStr, ErrorStr) => {
-    console.log(StatusStr + ' ' + ErrorStr);
-    records = [
-      {name: 'Maks', score: 256},
-      {name: 'Alex', score: 541},
-      {name: 'Serhio', score: 548},
-      {name: 'Yuliya', score: 1087},
-      {name: 'Milena', score: 718},
-      {name: 'Sabina', score: 625},
-      {name: 'Vlad', score: 512},
-      {name: 'Victor', score: 336}
-    ];
-    console.log(records);
-  }
-});
+  sprites: {
+    spriteImg: null,
+    cometImg: null,
+    demonImg: null,
+    shotImg: null,
+    explosionImg: null
+  },
+  records: [],
+  initRecords() {
+    $.ajax(this.AjaxHandlerScript, {
+      type: 'POST',
+      data: {
+        f: 'READ',
+        n: 'GASPODARIK_PROJECT_SURFINSPACE'
+      },
+      success: (response) => {
+        this.records = (JSON.parse(response.result)).sort(sortScore);
+        function sortScore(a, b) {
+          return b.score - a.score;
+        }
+      },
+      error: (jqXHR, StatusStr, ErrorStr) => {
+        console.log(StatusStr + ' ' + ErrorStr);
+        this.records = [
+          {name: 'Maks', score: 256},
+          {name: 'Alex', score: 541},
+          {name: 'Serhio', score: 548},
+          {name: 'Yuliya', score: 1087},
+          {name: 'Milena', score: 718},
+          {name: 'Sabina', score: 625},
+          {name: 'Vlad', score: 512},
+          {name: 'Victor', score: 336}
+        ];
+      }
+    });
+  },
+  stars: [],
+  createStars() {
+    this.stars = new Array(300).fill().map(() => {
+      return {radius: Math.random() * this.width, speed: Math.random() * 0.005, angle: Math.random() * Math.PI * 2};
+    });
+  },
+  updateStars() {
+    this.stars.forEach(star => star.angle += star.speed);
+  },
+  start() {
+    this.init();
+    this.preload(() => {
+      this.run();
+    });
+    this.spa.renderNewState();
+  },
+  preload(callback) {
+    let loaded = 0;
+    let required = Object.keys(this.sprites).length;
 
-const fon = new Image();
-fon.src = './img/fon.png';
+    let onAssetLoad = () => {
+      ++loaded;
 
-const cometImg = new Image();
-cometImg.src = './img/comet.png';
+      if (loaded >= required) {
+        callback();
+      }
+    };
 
-const spriteImg = new Image();
-spriteImg.src = './img/sprite.png';
+    this.preloadSprites(onAssetLoad);
+  },
+  preloadSprites(onAssetLoad) {
+    for (let key in this.sprites) {
+      this.sprites[key] = new Image();
+      this.sprites[key].src = `./img/${key}.png`;
+      this.sprites[key].addEventListener('load', onAssetLoad);
+    }
+  },
+  init() {
+    this.canvas = document.getElementById('game-board');
+    this.context = this.canvas.getContext('2d');
+    this.initDimensions();
+    this.setTextFont();
+    this.initRecords();
+  },
+  setTextFont() {
+    this.context.font = '20px MuseoModerno';
+    this.context.fillStyle = 'white';
+  },
+  initDimensions() {
+   /* this.width = window.innerWidth;
+    this.height = window.innerHeight;
 
-const shotImg = new Image();
-shotImg.src = './img/shot.png';
+    if (this.width > this.dimensions.max.width) this.width = this.dimensions.max.width;
+    if (this.width < this.dimensions.min.width) this.width = this.dimensions.min.width;
 
-const explosionImg = new Image();
-explosionImg.src = './img/explosion.png';
+    if (this.height > this.dimensions.max.height) this.height = this.dimensions.max.height;
+    if (this.height < this.dimensions.min.height) this.height = this.dimensions.min.height;
 
-const demonImg = new Image();
-demonImg.src = './img/demon.png';
+    this.width = this.canvas.width;
+    this.height = this.canvas.height;*/
+    let data = {
+      maxWidth: game.dimensions.max.width,
+      maxHeight: game.dimensions.max.height,
+      minWidth: game.dimensions.min.width,
+      minHeight: game.dimensions.min.height,
+      realWidth: window.innerWidth,
+      realHeight: window.innerHeight
+    };
 
-function random(min, max) {
-  return Math.floor(Math.random() * (max + 1 - min)) + min;
-}
+    if (data.realWidth / data.realHeight > data.maxWidth / data.maxHeight) {
+      this.fitWidth(data);
+    } else {
+      this.fitHeight(data);
+    }
 
-let comets = [];
-let shots = [];
-let explosions = [];
-let demons = [];
-let stars = new Array(300).fill().map(() => {
-  return {radius: Math.random() * canvas.width, speed: Math.random() * 0.005, angle: Math.random() * Math.PI * 2};
-});
-let timer = 0;
-let score = 0;
-let sprite = {
-  size: spriteSize,
-  mouseX: 300,
-  mouseY: 500,
-  speedX: 5,
-  speedY: 5
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
+  },
+  fitWidth(data) {
+    this.height = Math.round(this.width * data.realHeight / data.realWidth);
+    this.height = Math.min(this.height, data.maxHeight);
+    this.height = Math.max(this.height, data.minHeight);
+    this.width = Math.round(data.realWidth * this.height / data.realHeight);
+    this.canvas.style.height = '100%';
+  },
+  fitHeight(data) {
+    this.width = Math.round(data.realWidth * data.maxHeight / data.realHeight);
+    this.width = Math.min(this.width, data.maxWidth);
+    this.width = Math.max(this.width, data.minWidth);
+    this.height = Math.round(this.width * data.realHeight / data.realWidth);
+    this.canvas.style.height = '100%';
+  },
+  run() {
+    this.create();
+    this.gameInterval = setInterval(() => {
+      this.update();
+    }, 0);
+  },
+  create() {
+    this.createStars();
+    this.board.create();
+    this.sprite.create();
+
+    /*
+    window.addEventListener('load', () => {
+      this.start(); ////????
+    })*/
+    //$('#game-board').mousemove(this.sprite.spriteOnMouseMove);
+    this.canvas.addEventListener('mousemove', (event) => {
+      this.sprite.mouseX = event.offsetX;
+      this.sprite.mouseY = event.offsetY;
+    });
+    this.canvas.addEventListener('touchmove', (event) => {
+      this.sprite.spriteOnTouchMove(event);
+    });
+
+  },
+  update() {
+    this.timer++;
+    this.board.create();
+    this.sprite.create();
+    this.updateStars();
+    this.board.update();
+    this.sprite.update();
+    this.render();
+  },
+  render() {
+    window.requestAnimationFrame(() => { /////requestAnimate
+      this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.context.fillStyle = 'rgba(0, 0, 8, 0.8)';
+      this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+      this.stars.forEach(star => {
+        this.context.beginPath();
+        this.context.arc(Math.cos(star.angle) * star.radius + this.canvas.width / 2, Math.sin(star.angle) * star.radius + this.canvas.height / 2, Math.random() * 3, 0, Math.PI * 2);
+        this.context.closePath();
+        this.context.fillStyle = 'white';
+        this.context.fill();
+      });
+      this.sprite.render();
+      this.board.render();
+      this.context.fillText('Score: ' + this.score, 20, 20);//es6
+    })
+  },
+  stop() {
+    clearInterval(this.gameInterval);
+    this.modal.modal();
+    //window.location.reload();
+  },
+  modal: null,
+  /*onEntityShotDown(entity) {
+    switch (entity) {
+      case 'comets':
+        this.game.onCometShotDown();
+        break;
+      case 'demons':
+        this.game.onDemonShotDown();
+        break;
+    }
+  },*/
+  /*onCometShotDown() {
+    ++this.game.score;
+  },*/
+  /*onDemonShotDown() {
+    this.game.score += 10;
+  }*/
 };
 
-
-function canvasResize (event) {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-$(window).resize(canvasResize);
-
-function spriteMouseMove (event) {
-  sprite.mouseX = event.offsetX;
-  sprite.mouseY = event.offsetY;
-}
-$('#game-board').mousemove(spriteMouseMove);
-
-
-
-canvas.addEventListener('touchmove', (event) => {
-  event.preventDefault();
-  sprite.mouseX = event.touches[0].clientX;
-  sprite.mouseY = event.touches[0].clientY;
-});
-
+$(window).resize(game.initDimensions);
+//$('#game-board').mousemove(game.sprite.spriteOnMouseMove);
+/*game.canvas.addEventListener('mousemove', game.spriteOnMouseMove);
+game.canvas.addEventListener('touchmove', (event) => {
+  game.sprite.spriteOnTouchMove(event);
+});*/
 document.addEventListener('keydown', (event) => {
-  function moveDown() {
-    sprite.mouseY += sprite.speedY;
-    if (sprite.mouseY + spriteSize / 2 >= canvas.height) {
-      sprite.mouseY = canvas.height - spriteSize / 2;
-    }
-  }
-
-  function moveUp() {
-    sprite.mouseY -= sprite.speedY;
-    if (sprite.mouseY - spriteSize / 2 < 0) {
-      sprite.mouseY = spriteSize / 2;
-    }
-  }
-
-  function moveLeft() {
-    sprite.mouseX -= sprite.speedX;
-    if (sprite.mouseX - spriteSize / 2 < 0) {
-      sprite.mouseX = spriteSize / 2;
-    }
-  }
-
-  function moveRight() {
-    sprite.mouseX += sprite.speedX;
-    if (sprite.mouseX + spriteSize / 2 >= canvas.width) {
-      sprite.mouseX = canvas.width - spriteSize / 2;
-    }
-  }
-  switch (event.code) {
-    case 'ArrowLeft':
-      moveLeft();
-      break;
-    case 'ArrowRight':
-      moveRight();
-      break;
-    case 'ArrowDown':
-      moveDown();
-      break;
-    case 'ArrowUp':
-      moveUp();
-      break;
-  }
-  });
+  game.sprite.spriteOnKeydown(event);
+});
+window.addEventListener('load', () => {
+  game.start();
+});
 
 
-window.onload = function () {
-  game();
-};
 
+/*
+function canvasResize(event) {
+  this.canvas.width = window.innerWidth;
+  this.canvas.height = window.innerHeight;
+}
+*/
+/*
 function game() {
   update();
   render();
   requestAnimateFrame(game);
 }
+*/
 
-
-function update() {
-  timer++;
-
-  stars.forEach(star => star.angle += star.speed);
-
-  if (timer % 20 === 0) {
-    comets.push({
-      size: random(20, 40),
-      posX: random(0, canvas.width),
-      posY: -cometSize,
-      speedX: 0,
-      speedY: random(1, 4),
-      flag: 0,
-      angle: 0,
-      rotateAngle: Math.random() * 0.2 - 0.1
-    });
-  }
+//function update() {
   /*let pushcomets = () => {comets.push({
     size: cometSize,
     posX: Math.floor(Math.random() * 400),
@@ -188,26 +260,7 @@ function update() {
     speedY: Math.floor(Math.random() * 4) + 1
   })};
   setInterval(pushcomets, 5000);*/
-
-  if (timer % 200 === 0) {
-    demons.push({
-      size: demonSize,
-      posX: (canvas.width - demonSize) * Math.floor(Math.random() * 2),
-      posY: -demonSize,
-      speedX: 2,
-      speedY: 2,
-      flag: 0
-    });
-  }
-
-  if (timer % 20 === 0) {
-    shots.push({size: shotSize, posX: sprite.mouseX - 20, posY: sprite.mouseY - 70, speedX: 0, speedY: -5})
-  }
-
-  shots.forEach((shot, i, a) => {shot.posY += shot.speedY;
-    if (shot.posY < -50) shots.splice(i, 1);});
-
-
+/*
   for (var p = 0; p < demons.length; p++) {
     demons[p].posX += demons[p].speedX;
     demons[p].posY += demons[p].speedY;
@@ -243,7 +296,6 @@ function update() {
     comets[i].posX += comets[i].speedX;
     comets[i].posY += comets[i].speedY;
     comets[i].angle += comets[i].rotateAngle;
-
     if (comets[i].posY > canvas.height) {
       comets.splice(i, 1);
     }
@@ -255,9 +307,7 @@ function update() {
       modal();
       //cancelAnimateFrame(game);
       // window.location.reload();
-
     }
-
     for (var j = 0; j < shots.length; j++) {
       if (Math.abs(comets[i].posX - shots[j].posX) < cometSize && Math.abs(comets[i].posY - shots[j].posY) < cometSize) {
         explosions.push({
@@ -276,19 +326,9 @@ function update() {
       comets.splice(i, 1);
     }
   }
-  explosions.forEach((explosion, i, a) => {
-    explosion.animX += 0.1;
-    if (explosion.animX > 5) {
-      explosion.animY++;
-      explosion = 0;
-    }
-    if (explosion.animY > 4) {
-      explosions.splice(i, 1);
-    }
-  });
-
 }
-
+*/
+/*
 function render() {
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.fillStyle = 'rgba(0, 0, 8, 0.8)';
@@ -315,8 +355,8 @@ function render() {
 }
 
 function sendResult() {
-}
-
+}*/
+/*
 var requestAnimateFrame =
   window.requestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
@@ -336,74 +376,7 @@ var cancelAnimateFrame =
   function () {
     window.clearInterval(1000 / 60);
   };
-
-function modal() {
-  document.getElementById('modal').style.display = 'block';
-  var backdrop = document.querySelector('.backdrop');
-  var modal = document.querySelector('.modal');
-  var modalNoButton = document.querySelector('.modal__action--negative');
-  var modalYesButton = document.querySelector('#save-result');
-  var result = document.getElementById('result');
-  result.textContent = `Your result: ${score}!`;
-  modal.classList.add('open');
-  backdrop.classList.add('open');
-
-  if (modalYesButton) {
-    modalYesButton.addEventListener('click', () => {
-      records.push({name: document.getElementById('player-name').value, score: score});
-      var password = '123';
-      $.ajax({
-        url: AjaxHandlerScript,
-        type: 'POST',
-        data: {
-          f: 'LOCKGET',
-          n: 'GASPODARIK_PROJECT_SURFINSPACE',
-          p: password
-        },
-        cache: false,
-        success: function () {
-          $.ajax({
-            url: AjaxHandlerScript,
-            type: 'POST',
-            data: {
-              f: 'UPDATE',
-              n: 'GASPODARIK_PROJECT_SURFINSPACE',
-              p: password,
-              v: JSON.stringify(records)
-            },
-            cache: false,
-            success: (response) => {
-              console.log(response)
-            },//???
-            error: errorHandler
-          });
-          /*function scoreReset() {
-            score = null;
-          }*/
-        },
-        error: errorHandler
-      });
-
-      closeModal();
-    });
-  }
-
-  if (modalNoButton) {
-    modalNoButton.addEventListener('click', closeModal);
-  }
-
-  function closeModal() {
-    if (modal) {
-      modal.classList.remove('open');
-    }
-    backdrop.classList.remove('open');
-  }
-}
-
-function errorHandler(jqXHR, StatusStr, ErrorStr) {
-  alert(StatusStr + ' ' + ErrorStr);
-}
-
+*/
 /*
 function insertResult() {
   $.ajax({
@@ -421,7 +394,6 @@ function insertResult() {
     error: this.errorHandler
   });
 }
-
 
 $.ajax(AjaxHandlerScript, {
         type: 'POST',
