@@ -1,3 +1,5 @@
+'use strict';
+
 game.modal = {
   game,
   modal() {
@@ -9,7 +11,31 @@ game.modal = {
     result.textContent = `Your result: ${this.game.score}!`;
 
     $('#save-result').click(() => {
-      this.game.records.push({name: document.getElementById('player-name').value, score: this.game.score});
+      function nameValidation(value, elem, args) {
+        if (value.length >= args) return false;
+        return /^[A-ZА-ЯЁ][a-zа-яё]+$/.test(value);
+      }
+
+      $.validator.addMethod('name', nameValidation,
+        'Введите имя с большой буквы');
+      $('#valid-name').validate({
+        rules:
+          {
+            im: {required: true, name: 20}
+          },
+        messages:
+          {
+            im:
+              {
+                required: 'Укажите имя!',
+                russian_name: 'Введите нормальное имя!'
+              }
+          }
+      });
+      this.game.records.push({
+        name: document.getElementById('player-name').value || 'Nameless',
+        score: this.game.score
+      });
       const password = '123';
       $.ajax({
         url: this.game.AjaxHandlerScript,
@@ -44,7 +70,6 @@ game.modal = {
     $('.modal__action--negative').click(() => {
       this.closeModal();
     });
-
   },
   closeModal() {
     $('.backdrop').removeClass('open');

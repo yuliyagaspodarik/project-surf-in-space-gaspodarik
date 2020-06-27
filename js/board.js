@@ -1,3 +1,5 @@
+'use strict';
+
 game.board = {
   game,
   cometSize: 40,
@@ -30,7 +32,7 @@ game.board = {
     if (this.game.timer % 200 === 0) {
       this.demons.push({
         size: this.demonSize,
-        posX: (this.game.canvas.width - this.demonSize) * Math.floor(Math.random() * 2),//this.random
+        posX: (this.game.canvas.width - this.demonSize) * this.random(0, 1),
         posY: -this.demonSize,
         speedX: 4,
         speedY: 2,
@@ -77,9 +79,7 @@ game.board = {
         demon.speedX = -demon.speedX;
       }
       if (demon.posY > this.game.canvas.height) {
-        //setTimeout(() => {
         this.demons.splice(i, 1);
-        //}, 2000);
       }
       if (demon.posX + demon.size >= this.game.sprite.mouseX - this.game.sprite.spriteSize / 4 && demon.posX <= this.game.sprite.mouseX + this.game.sprite.spriteSize / 4 && demon.posY + demon.size >= this.game.sprite.mouseY - this.game.sprite.spriteSize / 4 && demon.posY <= this.game.sprite.mouseY + this.game.sprite.spriteSize / 4) {
         this.game.stop();
@@ -93,7 +93,7 @@ game.board = {
             animY: 0
           });
           demon.flag = 1;
-          this.game.score +=10;
+          this.game.score += 10;
           this.game.sprite.shots.splice(j, 1);
         }
       });
@@ -107,7 +107,7 @@ game.board = {
       this.game.stop();
     }
   },
-  interaction() {//////////////?????rename
+  interaction() {
     this.createExplosion();
     this.removeEntity(this.demons);
     this.removeEntity(this.comets);

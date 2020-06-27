@@ -1,9 +1,10 @@
+'use strict';
+
 game.sprite = {
   game,
   spriteSize: 100,
-  //size: this.spriteSize,
-  mouseX: 300,//посмотреть размеры
-  mouseY: 300,//
+  mouseX: 300,
+  mouseY: 300,
   speedX: 5,
   speedY: 5,
   shotSize: 50,
@@ -22,15 +23,9 @@ game.sprite = {
   updateShot() {
     this.shots.forEach((shot, i, a) => {
       shot.posY += shot.speedY;
-      //this.game.board.shotDownEntity(this.game.board.demons, i, shot);
-      //this.game.board.shotDownEntity(this.game.board.comets, i, shot);
       if (shot.posY < -50) this.shots.splice(i, 1);
     });
   },
- /* spriteOnMouseMove(event) {
-    this.mouseX = event.offsetX;
-    this.mouseY = event.offsetY;
-  },*/
   spriteOnTouchMove(event) {
     event.preventDefault();
     this.mouseX = event.touches[0].clientX;
@@ -79,8 +74,7 @@ game.sprite = {
   render() {
     this.game.context.drawImage(this.game.sprites.spriteImg, this.mouseX - this.spriteSize / 2, this.mouseY - this.spriteSize / 2, this.spriteSize, this.spriteSize);
     this.shots.forEach(shot => this.game.context.drawImage(this.game.sprites.shotImg, shot.posX, shot.posY, shot.size, shot.size));
-  },
-
+  }
 };
 
 

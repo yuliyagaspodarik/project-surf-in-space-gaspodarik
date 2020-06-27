@@ -1,12 +1,12 @@
 * {
     outline: none;
-   /* font-family: 'MuseoModerno', cursive;*/
+    font-family: 'MuseoModerno', cursive;
 }
 
 body {
-    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
     margin: 0;
     overflow: hidden;
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
 }
 
 #game {
@@ -19,21 +19,21 @@ canvas {
 }
 
 .modal {
-    position: fixed;
     display: none;
-    box-sizing: border-box;
-    z-index: 200;
+    position: fixed;
     top: 20%;
     left: 30%;
     width: 40%;
-    background: linear-gradient(to top, #ffffff, #6e6e6e);
+    box-sizing: border-box;
+    z-index: 200;
     padding: 5rem 0;
     border: 1px solid #6e6e6e;
     border-radius: 30px;
+    background: linear-gradient(to top, #ffffff, #6e6e6e);
     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    color: white;
     opacity: 0.8;
     text-transform: uppercase;
-    color: white;
 }
 
 .modal__title {
@@ -46,12 +46,12 @@ canvas {
 }
 
 .modal__action {
-    background: linear-gradient(to top, #1B2735, #4f647a);
+    padding: 0.5rem 1rem;
     border: 1px solid #1B2735;
+    background: linear-gradient(to top, #1B2735, #4f647a);
     color: white;
     text-decoration: none;
     font: inherit;
-    padding: 0.5rem 1rem;
     cursor: pointer;
     animation: pulsate 1.2s linear infinite;
 }
@@ -59,7 +59,6 @@ canvas {
 .modal__action:hover,
 .modal__action:active {
     background: linear-gradient(to top, #4f647a, #1B2735);
-
 }
 
 .modal__action--negative {
@@ -78,13 +77,13 @@ canvas {
 }
 
 .backdrop {
-    position: fixed;
     display: none;
+    position: fixed;
     top: 0;
     left: 0;
-    z-index: 100;
     width: 100vw;
     height: 100vh;
+    z-index: 100;
     background: rgba(0, 0, 0, 0.5);
 }
 
@@ -99,9 +98,9 @@ canvas {
 .main-page-button {
     position: absolute;
     left: calc(50% - 40px);
-    bottom: 2px;
     width: 80px;
     height: 80px;
+    bottom: 2px;
     border-radius: 50%;
     border: 1px solid #1B2735;
     background: linear-gradient(to top, #1B2735, #617b96);
@@ -119,6 +118,8 @@ canvas {
 #spa {
     display: block;
     position: relative;
+    will-change: transform;
+    transform: translateZ(0);
 }
 
 #spa-name {
@@ -128,16 +129,17 @@ canvas {
     border-radius: 5px;
     color: white;
     text-transform: uppercase;
-    font-family: 'Arial Black', sans-serif;
+    font-family: 'MuseoModerno', sans-serif;
     font-size: 6rem;
+    font-weight: 900;
     text-align: center;
 }
 
 #spa-name--image {
-    width: 20%;
     position: absolute;
-    right: -150px;
     top: 50px;
+    right: -150px;
+    width: 20%;
     animation: snake 10s ease infinite;
 }
 
@@ -182,21 +184,20 @@ canvas {
     left: 40%;
     width: 20%;
     padding: 1rem;
-    background: linear-gradient(to top, black, #222);
     border: 1px transparent;
     border-radius: 30px;
+    background: linear-gradient(to top, black, #222);
     color: white;
-    letter-spacing: 2px;
-    font-family: "Arial Black", sans-serif;
+    font-family: "MuseoModerno", sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
+    letter-spacing: 2px;
     animation: pulsate 1.2s linear infinite;
     opacity: 0.9;
 }
 
 .spa-button:hover {
     background: linear-gradient(to top, #222, black);
-
 }
 
 @keyframes pulsate {
@@ -225,7 +226,7 @@ canvas {
 #records-content {
     list-style-type: none;
     width: 50%;
-    margin: 4rem auto;
+    margin: 2rem auto;
     padding: 0;
     color: white;
     font-size: 2rem;
@@ -260,4 +261,69 @@ canvas {
     background: linear-gradient(to right, purple, pink, cyan, blue, violet);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+#audio {
+    display: none;
+}
+
+@media (max-width: 55.3rem) {
+    #spa-name {
+        font-size: 4rem;
+    }
+
+    .spa-button {
+        font-size: 1rem;
+    }
+
+    #player-name {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 40rem) {
+    #spa-name {
+        font-size: 3rem;
+    }
+
+    .spa-button {
+        padding: 0.2rem 0;
+        font-size: 0.8rem;
+    }
+
+    #rules p {
+        font-size: 1.2rem;
+    }
+
+    #records-content {
+        font-size: 1.2rem;
+    }
+
+    .modal__title {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 30rem) {
+    #spa-name {
+        padding-left: 0;
+        font-size: 2rem;
+    }
+
+    .spa-button {
+        padding: 0.2rem 0;
+        font-size: 0.4rem;
+    }
+
+    #player-name {
+        font-size: 0.4rem;
+    }
+
+    #rules p {
+        font-size: 0.8rem;
+    }
+
+    .modal__action {
+        font-size: 0.6rem;
+    }
 }
