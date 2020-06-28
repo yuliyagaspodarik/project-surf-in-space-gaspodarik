@@ -115,6 +115,19 @@ canvas {
     background: linear-gradient(to top, #617b96, #1B2735);
 }
 
+#main-page-button--play {
+    top: calc(50% - 50px);
+    left: calc(50% - 50px);
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(to top, #16812c, #82de76);
+    font-size: 2rem;
+}
+
+#main-page-button--play:hover {
+    background: linear-gradient(to top, #82de76, #16812c);
+}
+
 #spa {
     display: block;
     position: relative;

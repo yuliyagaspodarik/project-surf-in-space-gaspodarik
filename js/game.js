@@ -67,6 +67,7 @@ let game = {
     this.stars.forEach(star => star.angle += star.speed);
   },
   start() {
+    $('#main-page-button--play').hide();
     this.init();
     this.preload(() => {
       this.run();
@@ -183,8 +184,5 @@ document.addEventListener('keydown', (event) => {
   game.sprite.spriteOnKeydown(event);
 });
 
-window.addEventListener('load', () => {
-  game.start();
-});
 
 

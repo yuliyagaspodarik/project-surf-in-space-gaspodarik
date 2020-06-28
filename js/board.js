@@ -21,7 +21,7 @@ game.board = {
         posX: this.random(0, this.game.canvas.width),
         posY: -this.cometSize,
         speedX: 0,
-        speedY: this.random(1, 4),
+        speedY: this.random(1, 3),
         flag: 0,
         angle: 0,
         rotateAngle: Math.random() * 0.2 - 0.1
